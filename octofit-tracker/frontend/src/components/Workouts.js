@@ -21,16 +21,37 @@ const Workouts = () => {
       });
   }, [endpoint]);
 
-  if (loading) return <div>Loading Workouts...</div>;
+  if (loading) return <div className="text-center my-4">Loading Workouts...</div>;
+
+  if (!workouts.length) return <div className="alert alert-info my-4">No workouts found.</div>;
+
+  const headers = workouts[0] ? Object.keys(workouts[0]) : [];
 
   return (
-    <div>
-      <h2>Workouts</h2>
-      <ul>
-        {workouts.map((workout, idx) => (
-          <li key={workout.id || idx}>{JSON.stringify(workout)}</li>
-        ))}
-      </ul>
+    <div className="card shadow-sm mb-4">
+      <div className="card-body">
+        <h2 className="card-title mb-4 text-primary">Workouts</h2>
+        <div className="table-responsive">
+          <table className="table table-striped table-bordered align-middle">
+            <thead className="table-primary">
+              <tr>
+                {headers.map((header) => (
+                  <th key={header}>{header.replace(/_/g, ' ').toUpperCase()}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {workouts.map((workout, idx) => (
+                <tr key={workout.id || idx}>
+                  {headers.map((header) => (
+                    <td key={header}>{String(workout[header])}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

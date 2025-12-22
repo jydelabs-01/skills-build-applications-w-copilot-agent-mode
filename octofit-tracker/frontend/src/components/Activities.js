@@ -21,16 +21,38 @@ const Activities = () => {
       });
   }, [endpoint]);
 
-  if (loading) return <div>Loading Activities...</div>;
+  if (loading) return <div className="text-center my-4">Loading Activities...</div>;
+
+  if (!activities.length) return <div className="alert alert-info my-4">No activities found.</div>;
+
+  // Get table headers from keys of first activity
+  const headers = activities[0] ? Object.keys(activities[0]) : [];
 
   return (
-    <div>
-      <h2>Activities</h2>
-      <ul>
-        {activities.map((activity, idx) => (
-          <li key={activity.id || idx}>{JSON.stringify(activity)}</li>
-        ))}
-      </ul>
+    <div className="card shadow-sm mb-4">
+      <div className="card-body">
+        <h2 className="card-title mb-4 text-primary">Activities</h2>
+        <div className="table-responsive">
+          <table className="table table-striped table-bordered align-middle">
+            <thead className="table-primary">
+              <tr>
+                {headers.map((header) => (
+                  <th key={header}>{header.replace(/_/g, ' ').toUpperCase()}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {activities.map((activity, idx) => (
+                <tr key={activity.id || idx}>
+                  {headers.map((header) => (
+                    <td key={header}>{String(activity[header])}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

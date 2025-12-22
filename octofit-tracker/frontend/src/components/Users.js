@@ -21,16 +21,37 @@ const Users = () => {
       });
   }, [endpoint]);
 
-  if (loading) return <div>Loading Users...</div>;
+  if (loading) return <div className="text-center my-4">Loading Users...</div>;
+
+  if (!users.length) return <div className="alert alert-info my-4">No users found.</div>;
+
+  const headers = users[0] ? Object.keys(users[0]) : [];
 
   return (
-    <div>
-      <h2>Users</h2>
-      <ul>
-        {users.map((user, idx) => (
-          <li key={user.id || idx}>{JSON.stringify(user)}</li>
-        ))}
-      </ul>
+    <div className="card shadow-sm mb-4">
+      <div className="card-body">
+        <h2 className="card-title mb-4 text-primary">Users</h2>
+        <div className="table-responsive">
+          <table className="table table-striped table-bordered align-middle">
+            <thead className="table-primary">
+              <tr>
+                {headers.map((header) => (
+                  <th key={header}>{header.replace(/_/g, ' ').toUpperCase()}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user, idx) => (
+                <tr key={user.id || idx}>
+                  {headers.map((header) => (
+                    <td key={header}>{String(user[header])}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
